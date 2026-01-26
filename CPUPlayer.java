@@ -19,18 +19,23 @@ class CPUPlayer {
         return numExploredNodes;
     }
 
+    //Pour le générateur de coups, il est préférable d’explorer les cases du plateau
+    // de gauche à droite et de haut en bas comme le programme de test.
     // Retourne la liste des coups possibles.  Cette liste contient plusieurs coups
     // possibles si et seuleument si plusieurs coups ont le même score.
     public ArrayList<Move> getNextMoveMinMax(Board board) {
         numExploredNodes++;
-        return new ArrayList<>();
+        ArrayList<Move> possibleMoves = board.getAllPossibleMoves();
+        return possibleMoves;
     }
 
+    //Pour le générateur de coups, il est préférable d’explorer les cases du plateau
+    // de gauche à droite et de haut en bas comme le programme de test.
     // Retourne la liste des coups possibles.  Cette liste contient plusieurs coups
     // possibles si et seuleument si plusieurs coups ont le même score.
     public ArrayList<Move> getNextMoveAB(Board board) {
         numExploredNodes++;
-        return new ArrayList<>();
+        ArrayList<Move> possibleMoves = board.getAllPossibleMoves();
+        return possibleMoves;
     }
-
 }
