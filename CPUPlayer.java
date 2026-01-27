@@ -82,8 +82,68 @@ class CPUPlayer {
     // Retourne la liste des coups possibles.  Cette liste contient plusieurs coups
     // possibles si et seuleument si plusieurs coups ont le même score.
     public ArrayList<Move> getNextMoveAB(Board board) {
-        numExploredNodes = 0;
+        numExploredNodes = 1;
+        ArrayList<Move> bestMoves = new ArrayList<>();
         ArrayList<Move> possibleMoves = board.getAllPossibleMoves();
-        return possibleMoves;
+        int bestScore = Integer.MIN_VALUE;
+
+        for (Move move : possibleMoves) {
+            board.play(move, cpuMark);
+            int score = alphaBeta(board, false, Integer.MIN_VALUE, Integer.MAX_VALUE);
+            if (score > bestScore) {
+                bestScore = score;
+                bestMoves.clear();
+                bestMoves.add(move);
+            } else if (score == bestScore) {
+                bestMoves.add(move);
+            }
+            board.play(move, Mark.EMPTY);
+        }
+        return bestMoves;
+    }
+
+    private int alphaBeta(Board board, boolean isMax, int alpha, int beta) {
+        numExploredNodes++;
+        int score = board.evaluate(cpuMark);
+        if (score != 0 || board.isFull()){
+            return score;
+        }
+        ArrayList<Move> possibleMoves = board.getAllPossibleMoves();
+        if (isMax) {
+            int maxScore = Integer.MIN_VALUE;
+            for (Move move : possibleMoves) {
+                board.play(move, cpuMark);
+                int scoreMove = alphaBeta(board, false, alpha, beta);
+                if (scoreMove > maxScore) {
+                    maxScore = scoreMove;
+                }
+                board.play(move, Mark.EMPTY);
+                if (scoreMove >= beta) {
+                    break;
+                }
+                if (scoreMove > alpha) {
+                    alpha = scoreMove;
+                }
+            }
+            return maxScore;
+        }
+        else {
+            int minScore = Integer.MAX_VALUE;
+            for (Move move : possibleMoves) {
+                board.play(move, cpuMark == Mark.X ? Mark.O : Mark.X);
+                int scoreMove = alphaBeta(board, true, alpha, beta);
+                if (scoreMove < minScore) {
+                    minScore = scoreMove;
+                }
+                board.play(move, Mark.EMPTY);
+                if (scoreMove <= alpha) {
+                    break;
+                }
+                if (scoreMove < beta) {
+                    beta = scoreMove;
+                }
+            }
+            return minScore;
+        }
     }
 }
