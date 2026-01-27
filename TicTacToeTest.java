@@ -2,8 +2,67 @@ import java.util.Scanner;
 
 public class TicTacToeTest {
     public static void main(String[] args){
-        playAgainstCPU();
+        // playAgainstCPU();
+        minMaxVsAlphaBeta();
     }
+
+    private static void minMaxVsAlphaBeta() {
+        int games = 100;
+        int draws = 0, winsMinMax = 0, winsAlphaBeta = 0;
+        java.util.Random rnd = new java.util.Random();
+
+        long totalNanoMin = 0, totalNanoAB = 0;
+        long movesMin = 0, movesAB = 0;
+
+        for (int g = 0; g < games; g++) {
+            Board board = new Board();
+            CPUPlayer cpuMin = new CPUPlayer(Mark.O); // MinMax player
+            CPUPlayer cpuAB = new CPUPlayer(Mark.X);  // AlphaBeta player
+            Mark current = Mark.X;
+
+            while (board.evaluate(Mark.X) == 0 && !board.isFull()) {
+                java.util.ArrayList<Move> choices;
+                if (current == Mark.O) {
+                    long t0 = System.nanoTime();
+                    choices = cpuMin.getNextMoveMinMax(board);
+                    long t1 = System.nanoTime();
+                    totalNanoMin += (t1 - t0);
+                    movesMin++;
+                } else {
+                    long t0 = System.nanoTime();
+                    choices = cpuAB.getNextMoveAB(board);
+                    long t1 = System.nanoTime();
+                    totalNanoAB += (t1 - t0);
+                    movesAB++;
+                }
+
+                if (choices.isEmpty()) break;
+                Move chosen = choices.get(rnd.nextInt(choices.size()));
+                board.play(chosen, current);
+                current = (current == Mark.X) ? Mark.O : Mark.X;
+            }
+
+            int resultFromX = board.evaluate(Mark.X);
+            if (resultFromX == 100) winsMinMax++;
+            else if (resultFromX == -100) winsAlphaBeta++;
+            else draws++;
+        }
+
+        System.out.println("After " + games + " games: MinMax wins=" + winsMinMax
+                + ", AlphaBeta wins=" + winsAlphaBeta + ", draws=" + draws);
+
+        double totalMsMin = totalNanoMin / 1_000_000.0;
+        double totalMsAB = totalNanoAB / 1_000_000.0;
+        double avgMsMin = (movesMin > 0) ? (totalMsMin / movesMin) : 0.0;
+        double avgMsAB = (movesAB > 0) ? (totalMsAB / movesAB) : 0.0;
+
+        System.out.println("MinMax total time: " + totalMsMin + " ms, moves=" + movesMin
+                + ", avg=" + avgMsMin + " ms/move");
+        System.out.println("AlphaBeta total time: " + totalMsAB + " ms, moves=" + movesAB
+                + ", avg=" + avgMsAB + " ms/move");
+    }
+
+
 
     private static void playAgainstCPU(){
         // ////////// variable declaration ///////////////////////
