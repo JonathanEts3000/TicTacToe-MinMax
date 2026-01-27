@@ -40,8 +40,8 @@ public class TicTacToeTest {
             case "m" -> true;
             case "a" -> false;
             default -> {
-                System.out.println("Choix invalide, utilisation alphaBeta par défaut");
-                yield false;
+                System.out.println("Choix invalide, utilisation minMax par défaut");
+                yield true;
             }
         };
 
@@ -71,6 +71,7 @@ public class TicTacToeTest {
                         ? cpu.getNextMoveMinMax(board).getFirst()
                         : cpu.getNextMoveAB(board).getFirst();
                 board.play(nextMove, currentTurn);
+                System.out.println("CPU explored " + cpu.getNumOfExploredNodes() + " nodes.");
             }
             currentTurn = (currentTurn == Mark.X) ? Mark.O : Mark.X;
         }
