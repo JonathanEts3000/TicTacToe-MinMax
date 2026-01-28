@@ -2,8 +2,8 @@ import java.util.Scanner;
 
 public class TicTacToeTest {
     public static void main(String[] args){
-        // playAgainstCPU();
-        minMaxVsAlphaBeta();
+        playAgainstCPU();
+        //minMaxVsAlphaBeta();
     }
 
     private static void minMaxVsAlphaBeta() {
@@ -16,8 +16,8 @@ public class TicTacToeTest {
 
         for (int g = 0; g < games; g++) {
             Board board = new Board();
-            CPUPlayer cpuMin = new CPUPlayer(Mark.O); // MinMax player
-            CPUPlayer cpuAB = new CPUPlayer(Mark.X);  // AlphaBeta player
+            CPUPlayer cpuMin = new CPUPlayer(Mark.O);
+            CPUPlayer cpuAB = new CPUPlayer(Mark.X);
             Mark current = Mark.X;
 
             while (board.evaluate(Mark.X) == 0 && !board.isFull()) {

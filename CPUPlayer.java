@@ -24,7 +24,7 @@ class CPUPlayer {
     // Retourne la liste des coups possibles.  Cette liste contient plusieurs coups
     // possibles si et seuleument si plusieurs coups ont le même score.
     public ArrayList<Move> getNextMoveMinMax(Board board) {
-        numExploredNodes = 1;
+        numExploredNodes = 0;
         ArrayList<Move> bestMoves = new ArrayList<>();
         ArrayList<Move> possibleMoves = board.getAllPossibleMoves();
         int bestScore = Integer.MIN_VALUE;
@@ -82,7 +82,7 @@ class CPUPlayer {
     // Retourne la liste des coups possibles.  Cette liste contient plusieurs coups
     // possibles si et seuleument si plusieurs coups ont le même score.
     public ArrayList<Move> getNextMoveAB(Board board) {
-        numExploredNodes = 1;
+        numExploredNodes = 0;
         ArrayList<Move> bestMoves = new ArrayList<>();
         ArrayList<Move> possibleMoves = board.getAllPossibleMoves();
         int bestScore = Integer.MIN_VALUE;
@@ -118,11 +118,11 @@ class CPUPlayer {
                     maxScore = scoreMove;
                 }
                 board.play(move, Mark.EMPTY);
-                if (scoreMove >= beta) {
+                if (maxScore >= beta) {
                     break;
                 }
-                if (scoreMove > alpha) {
-                    alpha = scoreMove;
+                if (maxScore > alpha) {
+                    alpha = maxScore;
                 }
             }
             return maxScore;
@@ -136,11 +136,11 @@ class CPUPlayer {
                     minScore = scoreMove;
                 }
                 board.play(move, Mark.EMPTY);
-                if (scoreMove <= alpha) {
+                if (minScore <= alpha) {
                     break;
                 }
-                if (scoreMove < beta) {
-                    beta = scoreMove;
+                if (minScore < beta) {
+                    beta = minScore;
                 }
             }
             return minScore;
